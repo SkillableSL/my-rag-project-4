@@ -47,6 +47,7 @@ jobs:
           AZURE_OPENAI_ENDPOINT: ${{ vars.AZURE_OPENAI_ENDPOINT }}
           AZURE_OPENAI_NAME: ${{ vars.AZURE_OPENAI_NAME }}
           AZURE_RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}  
+          AZURE_PRINCIPAL_TYPE: ${{ vars.AZURE_PRINCIPAL_TYPE }}
           AZURE_SEARCH_ENDPOINT: ${{ vars.AZURE_SEARCH_ENDPOINT }}
           LOAD_AZURE_SEARCH_SAMPLE_DATA: ${{ vars.LOAD_AZURE_SEARCH_SAMPLE_DATA }}
           AZURE_SEARCH_NAME: ${{ vars.AZURE_SEARCH_NAME }}
@@ -58,7 +59,6 @@ jobs:
           AZURE_KEY_VAULT_NAME: ${{ vars.AZURE_KEY_VAULT_NAME }}
           AZURE_LOG_ANALYTICS_NAME: ${{ vars.AZURE_LOG_ANALYTICS_NAME }}
           AZURE_STORAGE_ACCOUNT_NAME: ${{ vars.AZURE_STORAGE_ACCOUNT_NAME }}
-          AZURE_PRINCIPAL_TYPE: ${{ vars.AZURE_PRINCIPAL_TYPE }}
 
   unit-testing:
     if: ${{ github.repository != 'Azure/GenAIOps-project-template' }}    
