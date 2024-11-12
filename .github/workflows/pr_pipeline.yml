@@ -62,6 +62,18 @@ jobs:
           AZURE_LOG_ANALYTICS_NAME: ${{ vars.AZURE_LOG_ANALYTICS_NAME }}
           AZURE_STORAGE_ACCOUNT_NAME: ${{ vars.AZURE_STORAGE_ACCOUNT_NAME }}
 
+      - name: Set Resource Group
+      id: set-resource-group
+      run: |
+        # Attempt to retrieve AZURE_RESOURCE_GROUP from azd
+        AZURE_RESOURCE_GROUP=$(azd env get-values -e "${{ vars.AZURE_ENV_NAME }}" | grep AZURE_RESOURCE_GROUP | cut -d'=' -f2 | tr -d '"')
+        if [ -z "$AZURE_RESOURCE_GROUP" ]; then
+          echo "Fallback: Setting AZURE_RESOURCE_GROUP to default 'rg-rag-project-dev'"
+          AZURE_RESOURCE_GROUP="rg-rag-project-dev"
+        fi
+        echo "AZURE_RESOURCE_GROUP=$AZURE_RESOURCE_GROUP" >> $GITHUB_ENV
+        echo "::set-output name=azure_resource_group::$AZURE_RESOURCE_GROUP"
+
       # Debug steps to confirm that AZURE_RESOURCE_GROUP is correctly retrieved
       - name: Debug AZURE_RESOURCE_GROUP
         run: |
