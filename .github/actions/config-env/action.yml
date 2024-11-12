@@ -99,31 +99,31 @@ runs:
       id: setup-env-step
       run: |
         VARIABLES=(
-          "AZUREAI_HUB_NAME"
-          "AZUREAI_PROJECT_NAME"
-          "AZURE_APP_INSIGHTS_NAME"
+          "AZUREAI_HUB_NAME" 
+          "AZUREAI_PROJECT_NAME" 
+          "AZURE_APP_INSIGHTS_NAME" 
           "AZURE_APP_SERVICE_NAME"
-          "AZURE_SUBSCRIPTION_ID"
-          "AZURE_LOCATION"
-          "AZURE_APP_SERVICE_PLAN_NAME"
-          "AZURE_CONTAINER_REGISTRY_NAME"
+          "AZURE_SUBSCRIPTION_ID" 
+          "AZURE_LOCATION" 
+          "AZURE_APP_SERVICE_PLAN_NAME" 
+          "AZURE_CONTAINER_REGISTRY_NAME" 
           "AZURE_CONTAINER_REPOSITORY_NAME"
-          "AZURE_KEY_VAULT_NAME"
-          "AZURE_LOG_ANALYTICS_NAME"
+          "AZURE_KEY_VAULT_NAME" 
+          "AZURE_LOG_ANALYTICS_NAME" 
           "AZURE_OPENAI_API_VERSION"
-          "AZURE_OPENAI_CHAT_DEPLOYMENT"
-          "AZURE_OPENAI_EMBEDDING_DEPLOYMENT"
+          "AZURE_OPENAI_CHAT_DEPLOYMENT" 
+          "AZURE_OPENAI_EMBEDDING_DEPLOYMENT" 
           "AZURE_OPENAI_EMBEDDING_MODEL"
-          "AZURE_OPENAI_ENDPOINT"
+          "AZURE_OPENAI_ENDPOINT" 
           "AZURE_OPENAI_NAME"
           "AZURE_PRINCIPAL_ID"
-          "AZURE_PRINCIPAL_TYPE"
+          "AZURE_PRINCIPAL_TYPE" 
           "AZURE_RESOURCE_GROUP"
-          "AZURE_SEARCH_ENDPOINT"
+          "AZURE_SEARCH_ENDPOINT" 
           "LOAD_AZURE_SEARCH_SAMPLE_DATA"
-          "AZURE_SEARCH_NAME"
-          "AZURE_STORAGE_ACCOUNT_NAME"
-          "PROMPTFLOW_SERVING_ENGINE"
+          "AZURE_SEARCH_NAME" 
+          "AZURE_STORAGE_ACCOUNT_NAME" 
+          "PROMPTFLOW_SERVING_ENGINE" 
           "PROMPTFLOW_WORKER_NUM"
         )
 
@@ -154,7 +154,7 @@ runs:
             echo "🔶 | Previous deployment exists." 
             deployment_exists=true
           fi
-
+        
           # Checking if previous deployment exists
           if [  "$deployment_exists" = false ]; then
             echo "Provisioning environment..." 
@@ -165,31 +165,11 @@ runs:
           # Checking if the resource group exists
           export AZURE_RESOURCE_GROUP=$(azd env get-values -e ${{ inputs.AZURE_ENV_NAME }} | grep AZURE_RESOURCE_GROUP | cut -d'=' -f2 | tr -d '"' || true)
           if [ -z "$AZURE_RESOURCE_GROUP" ]; then
-            echo "🔶 | AZURE_RESOURCE_GROUP not set by azd. Setting default value."
-            AZURE_RESOURCE_GROUP="rg-${{ inputs.AZURE_ENV_NAME }}"
-          fi
-          echo "🔶 | Resource group determined as ${AZURE_RESOURCE_GROUP}"
-
-          resource_group_exist=$(az group exists --name "$AZURE_RESOURCE_GROUP")
-          echo "🔶 | Resource group ${AZURE_RESOURCE_GROUP} exist status: $resource_group_exist"
-
-          # Re-create resources if needed
-          if [ "$deployment_exists" = true ] && [ "$resource_group_exist" = false ]; then
-            echo "❌ | Deployment exists but resource group $AZURE_RESOURCE_GROUP doesn't."
-            exit 1
-          fi
-
-          # Set environment variables by getting them from GitHub environment or the last deployment
-          echo "🔶 | Set environment variables."
-          for VAR in "${VARIABLES[@]}"; do
-            VALUE_OUTPUT=$(azd env get-values -e "${{ inputs.AZURE_ENV_NAME }}" | grep $VAR | cut -d'=' -f2 | tr -d '"' || true)
-            VALUE_GHAENV=$(eval echo \${$VAR})
-            VALUE=${VALUE_GHAENV:-$VALUE_OUTPUT}
-            export $VAR=$VALUE
-            echo "$VAR: $VALUE"
-            echo "$VAR=$VALUE" >> "$GITHUB_OUTPUT"
-          done
-        fi
+            resource_group_exist=false
+          else
+            resource_group_exist=$(az group exists --name "$AZURE_RESOURCE_GROUP")  
+          fi        
+          echo "🔶 | Resource group ${AZURE_RESOURCE_GROUP:-'Undefined'} exist status: $resource_group_exist"
 
           # Previous deployment exists but the resource group doesn't. 
           # This situation occurs if you made a deployment and then deleted the resource group.
