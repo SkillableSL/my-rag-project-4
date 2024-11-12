@@ -12,7 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: dev
     outputs:
-      AZURE_RESOURCE_GROUP: ${{ steps.config-env.outputs.AZURE_RESOURCE_GROUP }}
+      #AZURE_RESOURCE_GROUP: ${{ steps.config-env.outputs.AZURE_RESOURCE_GROUP }}
+      AZURE_RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}
       AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
       AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
       AZURE_OPENAI_NAME: ${{ steps.config-env.outputs.AZURE_OPENAI_NAME }}
@@ -33,8 +34,7 @@ jobs:
           AZURE_ENV_NAME: ${{ vars.AZURE_ENV_NAME }}
           AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
           AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
-          MANUAL_PROVISIONING: ${{ vars.MANUAL_PROVISIONING }}
-          AZURE_RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}  
+          MANUAL_PROVISIONING: ${{ vars.MANUAL_PROVISIONING }}  
         env:
           AZUREAI_PROJECT_NAME: ${{ vars.AZUREAI_PROJECT_NAME }}
           AZURE_APP_SERVICE_NAME: ${{ vars.AZURE_APP_SERVICE_NAME }}
