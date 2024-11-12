@@ -12,8 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: dev
     outputs:
-      #AZURE_RESOURCE_GROUP: ${{ steps.config-env.outputs.AZURE_RESOURCE_GROUP }}
-      AZURE_RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}
+      AZURE_RESOURCE_GROUP: ${{ steps.config-env.outputs.AZURE_RESOURCE_GROUP }}
       AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
       AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
       AZURE_OPENAI_NAME: ${{ steps.config-env.outputs.AZURE_OPENAI_NAME }}
@@ -60,6 +59,9 @@ jobs:
           AZURE_KEY_VAULT_NAME: ${{ vars.AZURE_KEY_VAULT_NAME }}
           AZURE_LOG_ANALYTICS_NAME: ${{ vars.AZURE_LOG_ANALYTICS_NAME }}
           AZURE_STORAGE_ACCOUNT_NAME: ${{ vars.AZURE_STORAGE_ACCOUNT_NAME }}
+          
+      - name: Debug AZURE_RESOURCE_GROUP
+        run: echo "AZURE_RESOURCE_GROUP is ${{ steps.config-env.outputs.AZURE_RESOURCE_GROUP }}"
 
   unit-testing:
     if: ${{ github.repository != 'Azure/GenAIOps-project-template' }}    
