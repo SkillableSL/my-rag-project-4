@@ -12,8 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: dev
     outputs:
-      # Explicitly setting AZURE_RESOURCE_GROUP to ensure it's captured correctly
-      AZURE_RESOURCE_GROUP: ${{ steps.config-env.outputs.AZURE_RESOURCE_GROUP || 'rg-rag-project-dev' }}
+      AZURE_RESOURCE_GROUP: ${{ steps.config-env.outputs.AZURE_RESOURCE_GROUP }}
       AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
       AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
       AZURE_OPENAI_NAME: ${{ steps.config-env.outputs.AZURE_OPENAI_NAME }}
@@ -26,7 +25,6 @@ jobs:
       AZUREAI_PROJECT_NAME: ${{ steps.config-env.outputs.AZUREAI_PROJECT_NAME }} 
     steps: 
       - uses: actions/checkout@v4
-
       - name: Get environment variables
         uses: ./.github/actions/config-env
         id: config-env
@@ -61,24 +59,6 @@ jobs:
           AZURE_KEY_VAULT_NAME: ${{ vars.AZURE_KEY_VAULT_NAME }}
           AZURE_LOG_ANALYTICS_NAME: ${{ vars.AZURE_LOG_ANALYTICS_NAME }}
           AZURE_STORAGE_ACCOUNT_NAME: ${{ vars.AZURE_STORAGE_ACCOUNT_NAME }}
-
-      - name: Set Resource Group
-      id: set-resource-group
-      run: |
-        # Attempt to retrieve AZURE_RESOURCE_GROUP from azd
-        AZURE_RESOURCE_GROUP=$(azd env get-values -e "${{ vars.AZURE_ENV_NAME }}" | grep AZURE_RESOURCE_GROUP | cut -d'=' -f2 | tr -d '"')
-        if [ -z "$AZURE_RESOURCE_GROUP" ]; then
-          echo "Fallback: Setting AZURE_RESOURCE_GROUP to default 'rg-rag-project-dev'"
-          AZURE_RESOURCE_GROUP="rg-rag-project-dev"
-        fi
-        echo "AZURE_RESOURCE_GROUP=$AZURE_RESOURCE_GROUP" >> $GITHUB_ENV
-        echo "::set-output name=azure_resource_group::$AZURE_RESOURCE_GROUP"
-
-      # Debug steps to confirm that AZURE_RESOURCE_GROUP is correctly retrieved
-      - name: Debug AZURE_RESOURCE_GROUP
-        run: |
-          echo "AZURE_RESOURCE_GROUP from config-env output: ${{ steps.config-env.outputs.AZURE_RESOURCE_GROUP }}"
-          echo "AZURE_RESOURCE_GROUP from vars fallback: ${{ vars.AZURE_RESOURCE_GROUP }}"
 
   unit-testing:
     if: ${{ github.repository != 'Azure/GenAIOps-project-template' }}    
