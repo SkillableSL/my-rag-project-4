@@ -12,7 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: dev
     outputs:
-      AZURE_RESOURCE_GROUP: ${{ steps.config-env.outputs.AZURE_RESOURCE_GROUP }}
+      # Explicitly setting AZURE_RESOURCE_GROUP to ensure it's captured correctly
+      AZURE_RESOURCE_GROUP: ${{ steps.config-env.outputs.AZURE_RESOURCE_GROUP || 'rg-rag-project-dev' }}
       AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
       AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
       AZURE_OPENAI_NAME: ${{ steps.config-env.outputs.AZURE_OPENAI_NAME }}
@@ -25,6 +26,7 @@ jobs:
       AZUREAI_PROJECT_NAME: ${{ steps.config-env.outputs.AZUREAI_PROJECT_NAME }} 
     steps: 
       - uses: actions/checkout@v4
+
       - name: Get environment variables
         uses: ./.github/actions/config-env
         id: config-env
@@ -59,9 +61,12 @@ jobs:
           AZURE_KEY_VAULT_NAME: ${{ vars.AZURE_KEY_VAULT_NAME }}
           AZURE_LOG_ANALYTICS_NAME: ${{ vars.AZURE_LOG_ANALYTICS_NAME }}
           AZURE_STORAGE_ACCOUNT_NAME: ${{ vars.AZURE_STORAGE_ACCOUNT_NAME }}
-          
+
+      # Debug steps to confirm that AZURE_RESOURCE_GROUP is correctly retrieved
       - name: Debug AZURE_RESOURCE_GROUP
-        run: echo "AZURE_RESOURCE_GROUP is ${{ steps.config-env.outputs.AZURE_RESOURCE_GROUP }}"
+        run: |
+          echo "AZURE_RESOURCE_GROUP from config-env output: ${{ steps.config-env.outputs.AZURE_RESOURCE_GROUP }}"
+          echo "AZURE_RESOURCE_GROUP from vars fallback: ${{ vars.AZURE_RESOURCE_GROUP }}"
 
   unit-testing:
     if: ${{ github.repository != 'Azure/GenAIOps-project-template' }}    
