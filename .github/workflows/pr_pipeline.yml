@@ -34,6 +34,7 @@ jobs:
           AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
           AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
           MANUAL_PROVISIONING: ${{ vars.MANUAL_PROVISIONING }}
+          AZURE_RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}  
         env:
           AZUREAI_PROJECT_NAME: ${{ vars.AZUREAI_PROJECT_NAME }}
           AZURE_APP_SERVICE_NAME: ${{ vars.AZURE_APP_SERVICE_NAME }}
@@ -53,12 +54,12 @@ jobs:
           PROMPTFLOW_SERVING_ENGINE: ${{ vars.PROMPTFLOW_SERVING_ENGINE }}
           PROMPTFLOW_WORKER_NUM: ${{ vars.PROMPTFLOW_WORKER_NUM }}
           AZURE_PRINCIPAL_ID: ${{ vars.AZURE_PRINCIPAL_ID }}
-          AZURE_PRINCIPAL_TYPE: ${{ vars.AZURE_PRINCIPAL_TYPE }}
           AZUREAI_HUB_NAME: ${{ vars.AZUREAI_HUB_NAME }}
           AZURE_APP_INSIGHTS_NAME: ${{ vars.AZURE_APP_INSIGHTS_NAME }}
           AZURE_KEY_VAULT_NAME: ${{ vars.AZURE_KEY_VAULT_NAME }}
           AZURE_LOG_ANALYTICS_NAME: ${{ vars.AZURE_LOG_ANALYTICS_NAME }}
           AZURE_STORAGE_ACCOUNT_NAME: ${{ vars.AZURE_STORAGE_ACCOUNT_NAME }}
+          AZURE_PRINCIPAL_TYPE: ${{ vars.AZURE_PRINCIPAL_TYPE }}
 
   unit-testing:
     if: ${{ github.repository != 'Azure/GenAIOps-project-template' }}    
